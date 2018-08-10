@@ -13,23 +13,29 @@
     <a :href="'/pages/article/main?id='+item._id +'&catalogId='+ catalogId "
        v-for="(item, val) in titles"
        :key="val"
-       @click="come()"
+       @click="close()"
        class="title">
       {{item.title}}
     </a>
   </div>
-  <div class="blank" @click="back()" v-if="isShow">
+  <div class="blank" @click="close()" v-if="isShow">
 
   </div>
   <div class="setting">
     <div class="button">
-      <div class="iconfont icon-mulu" @click="getCatalog()"></div>
+      <div class="iconfont icon-houtui1" @click="getLast()"></div>
+    </div>
+    <div class="button">
+      <div class="iconfont icon-mulu" @click="open()"></div>
     </div>
     <div class="button">
       <div class="iconfont icon-yueduye_zitizengda" @click="addFont()"></div>
     </div>
     <div class="button">
       <div class="iconfont icon-yueduye_zitijianxiao" @click="reduceFont()"></div>
+    </div>
+    <div class="button">
+      <div class="iconfont icon-qianjin" @click="getNext()"></div>
     </div>
   </div>
 </div>
@@ -45,27 +51,63 @@
         articleId: '',
         catalogId: '',
         fontSize: 40,
+        index: null,
         isShow: false
       }
     },
     methods: {
       getData () {
         axios.get(`/article/${this.articleId}`).then(res => {
-          console.log(this.articleId)
           this.article = res.data
         })
+      },
+      getLast () {
+        if (this.index === 0) {
+          wx.showModal({
+            title: '前面没有了'
+          })
+        } else {
+          this.index = this.index - 1
+          this.titles.forEach(item => {
+            if (item.index === this.index) {
+              this.articleId = item._id
+              // console.log(this.articleId)
+            }
+          })
+          this.getData()
+        }
+      },
+      getNext () {
+        if (this.index >= this.titles.length - 1) {
+          wx.showModal({
+            title: '后面没有了'
+          })
+        } else {
+          this.index = this.index + 1
+          this.titles.forEach(item => {
+            if (item.index === this.index) {
+              this.articleId = item._id
+              // console.log(this.articleId)
+            }
+          })
+          this.getData()
+        }
       },
       getCatalog () {
         axios.get(`/titles/${this.catalogId}`).then(res => {
           this.titles = res.data
-          this.isShow = true
+          this.titles.forEach(item => {
+            if (item._id === this.articleId) {
+              this.index = item.index
+            }
+          })
         })
       },
-      back () {
+      close () {
         this.isShow = false
       },
-      come () {
-        this.isShow = false
+      open () {
+        this.isShow = true
       },
       addFont () {
         if (this.fontSize >= 130) {
@@ -87,14 +129,12 @@
       }
     },
     onLoad (options) {
-      console.log(options)
       this.catalogId = options.catalogId
       this.articleId = options.id
       this.getData()
-      // this.getCatalog()
+      this.getCatalog()
     },
     onShareAppMessage (val) {
-      // console.log(val)
       return {
         title: this.article.title,
         path: '/pages/counter/main',
