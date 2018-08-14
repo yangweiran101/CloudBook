@@ -8,7 +8,7 @@
           >
     <block v-for="(item,index) in imgUrls" :key="index">
       <swiper-item>
-        <a :href="'/pages/counter/main?id='+item._id">
+        <a :href="'/pages/counter/main?id='+item.book._id">
           <image :src="item.img" class="slide-image" />
         </a>
       </swiper-item>
@@ -18,7 +18,7 @@
     <div class="book-title">{{item.title}}</div>
     <a :href="'/pages/counter/main?id='+obj._id" v-for="(obj,num) in item.books" :key="num">
       <div class="book-list">
-      <image :src="obj.img" class="image"/>
+      <img :src="obj.img" class="image">
       <div class="list-right">
         <div class="list-title">
           {{obj.title}}

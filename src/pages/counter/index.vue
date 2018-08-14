@@ -1,5 +1,8 @@
 <template>
   <div class="box">
+    <div class="loading" v-if="isLoading">
+      <img src="/static/img/loading.svg">
+    </div>
     <!--书籍介绍-->
     <div class="header clearfix">
       <img :src="bookDetail.img" class="fleft">
@@ -13,18 +16,17 @@
     <div class="botton clearfix">
       <button class="btn fleft">加入收藏</button>
       <button class="btn fleft" open-type="share">分享好友</button>
-      <button class="btn fleft">分享朋友圈</button>
     </div>
     <!--书籍介绍-->
 
     <!--书籍简介-->
     <div class="middle">
       <div class="desc">简介</div>
-      <div class="describe">{{bookDetail.desc}}</div>
+      <scroll-view scroll-y="true" class="describe">{{bookDetail.desc}}</scroll-view>
       <div class="tables clearfix">
         <div class="catalog fleft">查看目录</div>
         <div class="total fleft">共19章</div>
-        <div class="total fright">
+        <div class="total fright" @click="gotoRead()">
           更新于两天前
           <i class="iconfont icon-qianjin fright"></i>
         </div>
@@ -45,7 +47,8 @@
       return {
         bookDetail: {},
         bookId: '',
-        likenumber: null
+        likenumber: 0,
+        isLoading: true
       }
     },
     methods: {
@@ -53,6 +56,7 @@
         axios.get(`/book/${this.bookId}`).then(res => {
           this.bookDetail = res.data
           this.likenumber = res.data.like_this_users.length
+          this.isLoading = false
         })
       },
       gotoRead () {
@@ -60,6 +64,10 @@
           url: `/pages/catalog/main?id=${this.bookId}`
         })
       }
+    },
+    created () {
+      this.isLoading = true
+      this.bookDetail = {}
     },
     onLoad (options) {
       this.bookId = options.id // 获取传过来的查询字符串

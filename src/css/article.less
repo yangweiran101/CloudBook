@@ -2,6 +2,23 @@
 .content{
   padding: 20rpx;
   box-sizing: border-box;
+  .loading{
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    img{
+      width: 120px;
+      height: 120px;
+      display: block;
+      margin: 50% auto;
+    }
+  }
   .article{
     div{
       text-align: center;
@@ -11,16 +28,18 @@
     }
   }
   .catalog{
-    width: 70%;
+    width: 600rpx;
     height: 100%;
+    box-sizing: content-box;
     position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
     background: #fff;
-    border: 1px solid #333;
     z-index: 9999;
     overflow: scroll;
+    transition: transform .5s ease;
+    transform: translateX(-600rpx);
     .title {
       font-size: 16px;
       line-height: 32px;
@@ -29,14 +48,41 @@
     }
   }
   .blank{
-    width: 30%;
+    width: 100%;
     height: 100%;
     position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
     background: rgba(0,0,0,.3);
-    z-index: 9999;
+    z-index: 999;
+  }
+  .setting-btn{
+    height: 87%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 125px;
+    background: none;
+    z-index: 998;
+    color: #333;
+    .iconfont{
+      width: 50px;
+      height: 50px;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 50px;
+      text-align: center;
+      border-radius: 50%;
+      color: #fff;
+      background: #333;
+      border: 1px solid #333;
+      left: 630rpx;
+      top: 1000rpx;
+
+    }
   }
   .setting{
     position: fixed;
@@ -49,6 +95,7 @@
       padding: auto auto;
       width: 50px;
       height: 50px;
+      background: #fff;
       border-radius: 50%;
       box-shadow: 0 0 10px 0 rgba(0,0,0,.5);
       color: #333;
