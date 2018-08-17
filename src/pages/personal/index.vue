@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="details">
-      <div class="collect">
+      <div class="collect" @click="gotoCollect">
         <div class="count">2</div>
         <div>收藏</div>
       </div>
@@ -71,6 +71,11 @@
             icon: 'none'
           })
         }
+      },
+      gotoCollect () {
+        wx.navigateTo({
+          url: '/pages/collect/main'
+        })
       }
     },
     onShow () {

@@ -55,6 +55,7 @@
     },
     methods: {
       getDetail () { // 获取具体书籍数据
+        // this.bookDetail = {}
         axios.get(`/book/${this.bookId}`).then(res => {
           this.bookDetail = res.data
           this.likenumber = res.data.like_this_users.length
@@ -80,6 +81,8 @@
     },
     created () {
       this.isLoading = true
+    },
+    onShow () {
       this.bookDetail = {}
     },
     onLoad (options) {
