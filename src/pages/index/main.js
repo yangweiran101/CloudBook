@@ -7,7 +7,7 @@ export default {
   config: {
     ckgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',
-    navigationBarTitleText: '云书',
+    navigationBarTitleText: '程序猿云宝典',
     navigationBarTextStyle: 'black'
   }
 }

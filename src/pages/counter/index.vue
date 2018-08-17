@@ -55,7 +55,7 @@
     },
     methods: {
       getDetail () { // 获取具体书籍数据
-        // this.bookDetail = {}
+        this.bookDetail = {}
         axios.get(`/book/${this.bookId}`).then(res => {
           this.bookDetail = res.data
           this.likenumber = res.data.like_this_users.length
@@ -82,9 +82,6 @@
     created () {
       this.isLoading = true
     },
-    onShow () {
-      this.bookDetail = {}
-    },
     onLoad (options) {
       this.bookId = options.id // 获取传过来的查询字符串
       this.getDetail() // 调用获取书籍函数
@@ -99,6 +96,4 @@
     }
   }
 </script>
-
-
 <style scoped lang="less" src="../../css/counter.less"></style>

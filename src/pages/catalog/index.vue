@@ -32,13 +32,11 @@
         })
       }
     },
-    created () {
-      this.titles = []
-      this.isLoading = true
-    },
     onLoad (options) {
+      this.isLoading = true
       this.bookId = options.id
       this.getData()
+      this.titles = []
     }
   }
 </script>

@@ -8,6 +8,7 @@ export default {
     ckgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',
     navigationBarTitleText: '我的收藏',
-    navigationBarTextStyle: 'black'
+    navigationBarTextStyle: 'black',
+    onReachBottomDistance: 100
   }
 }
