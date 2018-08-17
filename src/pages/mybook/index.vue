@@ -1,0 +1,103 @@
+<template>
+    <div class="box">
+      <div class="loading" v-if="!isLoading">
+        <img src="/static/img/loading.svg">
+      </div>
+      <div class="content" v-if="isLoading">
+        <div class="read-item" v-for="(item,index) in readlist" :key="index">
+          <div class="left-box">
+            <img :src="item.book.img">
+          </div>
+          <div class="right-box">
+            <div class="title">
+              {{item.book.title}}
+            </div>
+            <div class="read-progress">
+              书籍{{item.title.index + 1}}/{{item.title.total}}章节
+            </div>
+            <div class="progress-wrap">
+              <progress
+                class="progress"
+                :percent="item.percent"
+                :active="true"
+                stroke-width="4"
+                activeColor="#1296db"
+                backgroundColor="#8a8a8a"
+              ></progress>
+              <span>已看{{item.percent}}%</span>
+            </div>
+            <div class="last-read">
+              <span>上次查看：{{item.title.title}}</span>
+              <span>两天前</span>
+            </div>
+            <div class="btns">
+              <button class="btn" @click="continueRead(item.title._id,item.title.bookId)">继续阅读</button>
+              <button class="btn" @click="watchCatalog(item.title.bookId)">查看文档</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</template>
+
+<script>
+  import {axios} from '../../utils/index'
+  export default {
+    data () {
+      return {
+        isLoading: false,
+        readlist: []
+      }
+    },
+    methods: {
+      getReadBook () {
+        axios.get('/readList').then(res => {
+          // console.log(res)
+          this.readlist = res.data.map(item => {
+            item.percent = Math.ceil(item.title.index / item.title.total * 100)
+            return item
+          })
+          this.isLoading = true
+          // console.log(this.isLoading)
+        })
+      },
+      getLogin () {
+        wx.login({
+          success: function (res) {
+            if (res.code) {
+              axios.login('/login',
+                {
+                  code: res.code,
+                  appid: 'wx8f6a2ce93e943d97',
+                  secret: 'be1f011156f56937525787faa2431aba'}).then(res => {
+                // console.log(res)
+                wx.setStorageSync('token', res.Token)
+              })
+            }
+          }
+        })
+        this.getReadBook()
+      },
+      continueRead (id, bookId) {
+        wx.navigateTo({
+          url: `/pages/article/main?id=${id}&catalogId=${bookId}`
+        })
+      },
+      watchCatalog (id) {
+        wx.navigateTo({
+          url: `/pages/catalog/main?id=${id}`
+        })
+      }
+    },
+    onShow () {
+      if (wx.getStorageSync('token')) {
+        this.getReadBook()
+      } else {
+        this.getLogin()
+        this.getReadBook()
+      }
+    }
+  }
+</script>
+
+<style scoped lang="less" src="../../css/mybook.less"></style>

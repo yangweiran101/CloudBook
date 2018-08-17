@@ -3,52 +3,54 @@
   <div class="loading" v-if="isLoading">
     <img src="/static/img/loading.svg">
   </div>
-  <div class="article" v-if="article.title" :style="{fontSize:fontSize + 'rpx'}">
-    <div>{{article.title}}</div>
-    <!--md文本插件-->
-    <wemark
-      :md="article.article.content"
-      link
-      :highlight="true"
-      type="rich-text"
-    ></wemark>
-  </div>
-  <!--目录-->
-  <scroll-view
-    scroll-y="true"
-    class="catalog"
-    :style="{transform: 'translateX(' + trans + ')'}">
-    <div v-for="(item, val) in titles" :key="val" @click="getNewArticle(item._id)" class="title">
-      {{item.title}}
+  <div class="container" v-if="!isLoading">
+    <div class="article" v-if="article.title" :style="{fontSize:fontSize + 'rpx'}">
+      <div>{{article.title}}</div>
+      <!--md文本插件-->
+      <wemark
+        :md="article.article.content"
+        link
+        :highlight="true"
+        type="rich-text"
+      ></wemark>
     </div>
-  </scroll-view>
-  <div class="blank" @click="close()" v-if="isShow"></div>
-  <!--设置按钮-->
-  <movable-area class="setting-btn">
-  <movable-view
-    @click="getSetting()"
-  class="iconfont icon-jiahao"
-  direction="all"
-  out-of-bounds="true"
-  inertia="true"
-  friction="1">
-  </movable-view>
-  </movable-area>
-  <div class="setting" v-if="isSet">
-    <div class="button">
-      <div class="iconfont icon-houtui1" @click="getLast()"></div>
-    </div>
-    <div class="button">
-      <div class="iconfont icon-mulu" @click="open()"></div>
-    </div>
-    <div class="button">
-      <div class="iconfont icon-yueduye_zitizengda" @click="addFont()"></div>
-    </div>
-    <div class="button">
-      <div class="iconfont icon-yueduye_zitijianxiao" @click="reduceFont()"></div>
-    </div>
-    <div class="button">
-      <div class="iconfont icon-qianjin" @click="getNext()"></div>
+    <!--目录-->
+    <scroll-view
+      scroll-y="true"
+      class="catalog"
+      :style="{transform: 'translateX(' + trans + ')'}">
+      <div v-for="(item, val) in titles" :key="val" @click="getNewArticle(item._id)" class="title">
+        {{item.title}}
+      </div>
+    </scroll-view>
+    <div class="blank" @click="close()" v-if="isShow"></div>
+    <!--设置按钮-->
+    <movable-area class="setting-btn">
+      <movable-view
+        @click="getSetting()"
+        class="iconfont icon-jiahao"
+        direction="all"
+        out-of-bounds="true"
+        inertia="true"
+        friction="1">
+      </movable-view>
+    </movable-area>
+    <div class="setting" v-if="isSet">
+      <div class="button">
+        <div class="iconfont icon-houtui1" @click="getLast()"></div>
+      </div>
+      <div class="button">
+        <div class="iconfont icon-mulu" @click="open()"></div>
+      </div>
+      <div class="button">
+        <div class="iconfont icon-yueduye_zitizengda" @click="addFont()"></div>
+      </div>
+      <div class="button">
+        <div class="iconfont icon-yueduye_zitijianxiao" @click="reduceFont()"></div>
+      </div>
+      <div class="button">
+        <div class="iconfont icon-qianjin" @click="getNext()"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -77,7 +79,7 @@
         axios.get(`/article/${this.articleId}`).then(res => {
           this.article = res.data
           this.isLoading = false
-          console.log(this.article)
+          // console.log(this.article)
         })
       },
       // 获取新文章
@@ -165,6 +167,7 @@
     },
     // 获取查询字符串参数
     onLoad (options) {
+      // console.log(options)
       this.catalogId = options.catalogId
       this.articleId = options.id
       this.getData()
@@ -181,5 +184,5 @@
   }
 </script>
 
-<style scoped lang="less" src="@/css/article.less">
+<style scoped lang="less" src="../../css/article.less">
 </style>

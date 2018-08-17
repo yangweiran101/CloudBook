@@ -4,9 +4,10 @@
        <img src="/static/img/loading.svg">
      </div>
      <a :href="'/pages/article/main?id='+item._id +'&catalogId='+ bookId "
-            v-for="(item, val) in titles"
-            :key="val"
-            class="title">
+        v-for="(item, val) in titles"
+        :key="val"
+        v-if="!isLoading"
+        class="title">
      {{item.title}}
    </a>
    </div>
@@ -42,4 +43,4 @@
   }
 </script>
 
-<style scoped lang="less" src="@/css/catalog.less"></style>
+<style scoped lang="less" src="../../css/catalog.less"></style>
