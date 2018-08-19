@@ -15,8 +15,8 @@ export const axios = {
         method: 'GET',
         header,
         success: function (res) {
-          if (res.header.Token) {
-            wx.setStorageSync('token', res.header.Token) // 判断登录请求头中是否有token，有的话存起来
+          if (res.header.token) {
+            wx.setStorageSync('token', res.header.token) // 判断登录请求头中是否有token，有的话存起来
           }
           resolve(res.data)
         }
@@ -38,8 +38,8 @@ export const axios = {
         method: 'POST',
         header,
         success: function (res) {
-          if (res.header.Token) {
-            wx.setStorageSync('token', res.header.Token) // 判断登录请求头中是否有token，有的话存起来
+          if (res.header.token || res.header.Token) {
+            wx.setStorageSync('token', res.header.token || res.header.Token) // 判断登录请求头中是否有token，有的话存起来
           }
           resolve(res.data)
         }

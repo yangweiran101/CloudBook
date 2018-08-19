@@ -74,9 +74,8 @@ export default {
             axios.login('/login', { code: res.code,
               appid: 'wx8f6a2ce93e943d97',
               secret: 'be1f011156f56937525787faa2431aba'}).then(res => {
-              if (res.data.code === 200) {
-                wx.setStorageSync('token', res.header.Token)
-                console.log(wx.getStorageSync('token'))
+              if (res.header.Token || res.header.token) {
+                wx.setStorageSync('token', res.header.Token || res.header.token)
               } else {
                 console.log('登录失败,重新登陆')
                 that.getLogin()
