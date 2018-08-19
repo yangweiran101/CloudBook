@@ -173,6 +173,10 @@
       this.getData()
       this.getCatalog()
     },
+    onShow () {
+      this.isShow = false
+      this.article = {}
+    },
     // 分享操作
     onShareAppMessage (val) {
       return {
