@@ -50,7 +50,7 @@ export const axios = {
           'content-type': 'application/json' //    默认值
         },
         success: function (res) {
-          resolve(res.header)
+          resolve(res)
         }
       })
     })

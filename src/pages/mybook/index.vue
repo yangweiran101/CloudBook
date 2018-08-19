@@ -1,9 +1,9 @@
 <template>
     <div class="box">
-      <div class="loading" v-if="!isLoading">
-        <img src="/static/img/loading.svg">
-      </div>
-      <div class="content" v-if="isLoading">
+      <!--<div class="loading" v-if="!isLoading">-->
+        <!--<img src="/static/img/loading.svg">-->
+      <!--</div>-->
+      <div class="content">
         <div class="read-item" v-for="(item,index) in readlist" :key="index">
           <div class="left-box">
             <img :src="item.book.img">
@@ -45,38 +45,45 @@
   export default {
     data () {
       return {
-        isLoading: false,
-        readlist: []
+        // isLoading: false,
+        readlist: [],
+        code: null
       }
     },
     methods: {
       getReadBook () {
         axios.get('/readList').then(res => {
-          // console.log(res)
           this.readlist = res.data.map(item => {
             item.percent = Math.ceil(item.title.index / item.title.total * 100)
             return item
           })
-          this.isLoading = true
-          // console.log(this.isLoading)
         })
       },
       getLogin () {
+        let that = this
         wx.login({
           success: function (res) {
             if (res.code) {
-              axios.login('/login',
-                {
-                  code: res.code,
-                  appid: 'wx8f6a2ce93e943d97',
-                  secret: 'be1f011156f56937525787faa2431aba'}).then(res => {
-                // console.log(res)
-                wx.setStorageSync('token', res.Token)
+              axios.login('/login', { code: res.code,
+                appid: 'wx8f6a2ce93e943d97',
+                secret: 'be1f011156f56937525787faa2431aba'}).then(res => {
+                console.log(res)
+                if (res.data.code === 200) {
+                  wx.setStorageSync('token', res.header.Token)
+                  that.getReadBook()
+                } else {
+                  console.log('登录失败,重新登陆')
+                  that.getLogin()
+                }
+              })
+            } else {
+              wx.showToast({
+                title: '登录失败',
+                icon: 'none'
               })
             }
           }
         })
-        this.getReadBook()
       },
       continueRead (id, bookId) {
         wx.navigateTo({
@@ -94,7 +101,6 @@
         this.getReadBook()
       } else {
         this.getLogin()
-        this.getReadBook()
       }
     }
   }

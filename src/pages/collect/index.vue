@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <div class="box">
-      <div class="book" v-for="(item,index) in collect" :key="index">
+      <div class="book" v-for="(item,index) in collect" :key="index" @click="gotoBook(item.book._id)">
         <img :src="item.book.img">
         <div class="title">{{item.book.title}}</div>
       </div>
@@ -24,6 +24,11 @@
       }
     },
     methods: {
+      gotoBook (id) {
+        wx.navigateTo({
+          url: `/pages/counter/main?id=${id}`
+        })
+      },
       getCollect () {
         axios.get('/collection', {pn: this.pn, size: 6}).then(res => {
           if (res.data.length === 0) {
@@ -31,6 +36,7 @@
           } else if (res.data.length <= 6) {
             this.isDone = true
             this.collect = this.collect.concat(res.data)
+            console.log(this.collect)
           } else {
             this.isDone = false
             this.collect = this.collect.concat(res.data)
@@ -45,6 +51,7 @@
       }
     },
     onShow () {
+      this.collect = []
       this.getCollect()
     },
     onUnload () {

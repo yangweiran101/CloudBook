@@ -16,7 +16,7 @@
     </div>
     <div class="details">
       <div class="collect" @click="gotoCollect">
-        <div class="count">2</div>
+        <div class="count">{{count}}</div>
         <div>收藏</div>
       </div>
       <div class="collect">
@@ -38,32 +38,44 @@
     data () {
       return {
         isLogin: false,
-        userInfo: {}
+        userInfo: {},
+        count: 0
       }
     },
     methods: {
+      getCollect () {
+        axios.get('/collection', {pn: 1, size: 100}).then(res => {
+          this.count = res.data.length
+        })
+      },
       getLogin () {
+        let that = this
         wx.login({
           success: function (res) {
             if (res.code) {
-              axios.login('/login',
-                {
-                  code: res.code,
-                  appid: 'wx8f6a2ce93e943d97',
-                  secret: 'be1f011156f56937525787faa2431aba'
-                }).then(res => {
-                wx.setStorageSync('token', res.Token)
+              axios.login('/login', { code: res.code,
+                appid: 'wx8f6a2ce93e943d97',
+                secret: 'be1f011156f56937525787faa2431aba'}).then(res => {
+                if (res.data.code === 200) {
+                  wx.setStorageSync('token', res.header.Token)
+                } else {
+                  console.log('登录失败,重新登陆')
+                  that.getLogin()
+                }
               })
             }
           }
         })
+        this.getCollect()
       },
       onGotUserInfo: function (e) {
-        // console.log(e.mp.detail.errMsg)
+        let that = this
         if (e.mp.detail.errMsg === 'getUserInfo:ok') {
           this.userInfo = e.mp.detail.userInfo
           wx.setStorageSync('userInfo', e.mp.detail.userInfo)
-          this.getLogin()
+          if (!wx.getStorageSync('token')) {
+            that.getLogin()
+          }
           this.isLogin = true
         } else {
           wx.showToast({
@@ -82,6 +94,7 @@
       if (wx.getStorageSync('userInfo')) {
         this.userInfo = wx.getStorageSync('userInfo')
         this.isLogin = true
+        this.getCollect()
       }
     }
   }
