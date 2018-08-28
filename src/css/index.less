@@ -34,17 +34,22 @@ a{
 .list-right{
   flex: 3;
   height: 260 rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 .list-title{
   font-size: 16px;
   font-weight: 500;
   line-height: 16px;
+  //height: 16px;
   margin: 10rpx 0;
   color: #333;
+  overflow: hidden;
 }
 .list-content{
   font-size: 14px;
   font-weight: 400;
-  margin: 10rpx 0 40rpx;
+  margin: 10rpx 0 10rpx;
   overflow: hidden;
   color: #666;
   text-overflow: ellipsis;

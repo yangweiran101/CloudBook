@@ -1,10 +1,10 @@
 <template>
     <div class="box">
-      <!--<div class="loading" v-if="!isLoading">-->
-        <!--<img src="/static/img/loading.svg">-->
-      <!--</div>-->
-      <div class="content">
-        <div class="read-item" v-for="(item,index) in readlist" :key="index">
+      <div class="loading" v-if="isLoading">
+        <img src="/static/img/loading1.svg">
+      </div>
+      <div class="content" v-if="!isLoading">
+        <div class="read-item" v-for="(item,key) in readlist" :key="key">
           <div class="left-box">
             <img :src="item.book.img">
           </div>
@@ -28,7 +28,7 @@
             </div>
             <div class="last-read">
               <span>上次查看：{{item.title.title}}</span>
-              <span>两天前</span>
+              <span><getTime :time="item.updatedTime"></getTime></span>
             </div>
             <div class="btns">
               <button class="btn" @click="continueRead(item.title._id,item.title.bookId)">继续阅读</button>
@@ -42,21 +42,28 @@
 
 <script>
   import {axios} from '../../utils/index'
+  import getTime from '../../components/getTime'
   export default {
+    components: {
+      getTime
+    },
     data () {
       return {
-        // isLoading: false,
+        isLoading: true,
         readlist: [],
         code: null
       }
     },
     methods: {
       getReadBook () {
+        this.isLoading = true
         axios.get('/readList').then(res => {
+          this.isLoading = false
           this.readlist = res.data.map(item => {
             item.percent = Math.ceil(item.title.index / item.title.total * 100)
             return item
           })
+          console.log(this.readlist)
         })
       },
       getLogin () {
@@ -83,7 +90,7 @@
             }
           }
         })
-        console.log(wx.getStorageSync('token'))
+        // console.log(wx.getStorageSync('token'))
         this.getReadBook()
       },
       continueRead (id, bookId) {

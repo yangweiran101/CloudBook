@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <div class="loading" v-if="isLoading">
-      <img src="/static/img/loading.svg">
+      <img src="/static/img/loading1.svg">
     </div>
     <div class="container" v-if="!isLoading">
       <!--书籍介绍-->
@@ -56,6 +56,7 @@
     methods: {
       getDetail () { // 获取具体书籍数据
         this.bookDetail = {}
+        this.isLoading = true
         axios.get(`/book/${this.bookId}`).then(res => {
           this.bookDetail = res.data
           this.likenumber = res.data.like_this_users.length
@@ -78,9 +79,6 @@
           })
         })
       }
-    },
-    created () {
-      this.isLoading = true
     },
     onLoad (options) {
       this.bookId = options.id // 获取传过来的查询字符串

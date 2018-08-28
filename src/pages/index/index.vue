@@ -26,11 +26,12 @@
         <div class="list-content">
           {{obj.desc}}
         </div>
-        <div class="list-detail">
+        <div class="list-detail clearfix">
           <span class="detail-author fleft">{{obj.author}}</span>
           <span class="detail-eye fright mleft">{{obj.looknums}}人在看</span>
-          <span class="detail-style fright mleft">{{item.title}}</span>
-          <span class="detail-time fright mleft">两天前</span>
+          <span class="detail-time fright mleft">
+            <getTime :time="obj.createTime"></getTime>
+          </span>
         </div>
       </div>
     </div>
@@ -42,7 +43,11 @@
 
 <script>
 import {axios} from '../../utils/index'
+import getTime from '../../components/getTime'
 export default {
+  components: {
+    getTime
+  },
   data () {
     return {
       imgUrls: [],
@@ -50,7 +55,9 @@ export default {
       indicatorDots: true,
       autoplay: true,
       interval: 5000,
-      duration: 1000
+      duration: 1000,
+      pn: 1,
+      isLoad: true
     }
   },
   methods: {
@@ -61,9 +68,13 @@ export default {
       })
     },
     getList () {
-      axios.get('/category/books').then(res => {
-        // console.log(res)
-        this.bookList = res.data
+      axios.get('/category/books', {pn: this.pn}).then(res => {
+        if (res.data.length === 0) {
+          this.isLoad = false
+        } else {
+          this.bookList = [...this.bookList, ...res.data]
+          // console.log(this.bookList)
+        }
       })
     },
     getLogin () {
@@ -76,6 +87,8 @@ export default {
               secret: 'be1f011156f56937525787faa2431aba'}).then(res => {
               if (res.header.Token || res.header.token) {
                 wx.setStorageSync('token', res.header.Token || res.header.token)
+                that.getSwipe()
+                that.getList()
               } else {
                 console.log('登录失败,重新登陆')
                 that.getLogin()
@@ -91,10 +104,19 @@ export default {
       })
     }
   },
+  onReachBottom () {
+    if (this.isLoad) {
+      this.pn = this.pn + 1
+      this.getList()
+    }
+  },
+  onUnload () {
+    this.Books = {}
+    this.pn = 1
+    this.isLoad = true
+  },
   created () {
     this.getLogin()
-    this.getSwipe()
-    this.getList()
   }
 }
 </script>

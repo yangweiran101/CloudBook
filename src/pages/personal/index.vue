@@ -59,24 +59,25 @@
                 if (res.header.Token || res.header.token) {
                   wx.setStorageSync('token', res.header.Token || res.header.token)
                 } else {
-                  console.log('登录失败,重新登陆')
+                  // console.log('登录失败,重新登陆')
                   that.getLogin()
                 }
+                that.getCollect()
+                that.isLogin = true
               })
             }
           }
         })
-        this.getCollect()
       },
       onGotUserInfo: function (e) {
         let that = this
         if (e.mp.detail.errMsg === 'getUserInfo:ok') {
+          that.isLogin = true
           this.userInfo = e.mp.detail.userInfo
           wx.setStorageSync('userInfo', e.mp.detail.userInfo)
           if (!wx.getStorageSync('token')) {
             that.getLogin()
           }
-          this.isLogin = true
         } else {
           wx.showToast({
             title: '授权失败，无法登陆',
@@ -93,7 +94,6 @@
     onShow () {
       if (wx.getStorageSync('userInfo')) {
         this.userInfo = wx.getStorageSync('userInfo')
-        this.isLogin = true
         this.getCollect()
       }
     }

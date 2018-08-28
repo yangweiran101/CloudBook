@@ -13,6 +13,7 @@ export default {
     // 页面前带有 ^ 符号的，会被编译成首页，其他页面可以选填，我们会自动把 webpack entry 里面的入口页面加进去
     pages: [
       '^pages/index/main',
+      'pages/library/main',
       'pages/mybook/main',
       'pages/personal/main'
     ],
@@ -23,14 +24,20 @@ export default {
       navigationBarTextStyle: 'black'
     },
     tabBar: {
+      selectedColor: '#1296db',
       list: [{
         pagePath: 'pages/index/main',
         text: '首页',
         iconPath: '/static/img/shouye.png',
         selectedIconPath: '/static/img/shouye2.png'
       }, {
+        pagePath: 'pages/library/main',
+        text: '图书馆',
+        iconPath: '/static/img/书架.png',
+        selectedIconPath: '/static/img/书架2.png'
+      }, {
         pagePath: 'pages/mybook/main',
-        text: '我的云书',
+        text: '我的宝典',
         iconPath: '/static/img/书.png',
         selectedIconPath: '/static/img/书2.png'
       }, {

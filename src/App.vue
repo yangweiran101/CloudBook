@@ -21,7 +21,7 @@ export default {
     float: right;
   }
   .mleft{
-    margin-left: 10rpx;
+    margin-left: 20rpx;
   }
 .clearfix::after {
   content: '';
